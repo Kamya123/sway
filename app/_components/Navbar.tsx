@@ -62,14 +62,15 @@ export default function Navbar() {
                         <div className='flex flex-wrap items-center gap-4 justify-center mt-4'>
                             {navLinks.map((navLink) => {
                                 return (
-                                    <DrawerClose key={navLink.href}>
-                                        <Link
-                                            href={navLink.href}
-                                            className='text-gray-400 hover:text-purple-400'
-                                        >
+                                    <Link
+                                        key={navLink.href}
+                                        href={navLink.href}
+                                        className='text-gray-400 hover:text-purple-400'
+                                    >
+                                        <DrawerClose>
                                             <p>{navLink.label}</p>
-                                        </Link>
-                                    </DrawerClose>
+                                        </DrawerClose>
+                                    </Link>
                                 );
                             })}
                         </div>
