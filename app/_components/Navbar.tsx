@@ -1,9 +1,9 @@
-import PrimaryButton from '@/components/Buttons/PrimaryButton';
-import Logo from '@/components/Logo';
 import Link from 'next/link';
-import { Menu } from 'lucide-react';
-import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import { Menu } from 'lucide-react';
+import Logo from '@/components/Logo';
+import PrimaryButton from '@/components/Buttons/PrimaryButton';
+import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 
 export default function Navbar() {
     const navLinks = [
@@ -50,7 +50,9 @@ export default function Navbar() {
                 })}
             </div>
             <div>
-                <PrimaryButton label='Get Started' className='hidden md:block' />
+                <Link href='/signup'>
+                    <PrimaryButton label='Get Started' className='hidden md:block' />
+                </Link>
                 <Drawer>
                     <DrawerTrigger className='md:hidden'>
                         <Menu className='text-gray-500' />

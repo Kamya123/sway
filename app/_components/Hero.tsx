@@ -1,5 +1,6 @@
 import PrimaryButton from '@/components/Buttons/PrimaryButton';
 import SecondaryButton from '@/components/Buttons/SecondaryButton';
+import Link from 'next/link';
 
 export default function Hero() {
     return (
@@ -19,8 +20,12 @@ export default function Hero() {
                 </p>
             </div>
             <div className='flex items-center gap-2'>
-                <PrimaryButton label='Get Started' />
-                <SecondaryButton label='Read More' />
+                <Link href={'/signup'}>
+                    <PrimaryButton label='Get Started' />
+                </Link>
+                <Link href={'#about'}>
+                    <SecondaryButton label='Read More' />
+                </Link>
             </div>
         </section>
     );

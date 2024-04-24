@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/sonner';
+import UserProvider from '@/providers/UserProvider';
 
 const poppins = Poppins({ weight: '400', subsets: ['latin'] });
 
@@ -17,7 +19,10 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={cn(poppins.className, 'overflow-x-hidden')}>{children}</body>
+            <body className={cn(poppins.className, 'overflow-x-hidden')}>
+                <UserProvider>{children}</UserProvider>
+                <Toaster />
+            </body>
         </html>
     );
 }
