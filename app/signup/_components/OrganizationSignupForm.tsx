@@ -49,6 +49,7 @@ export default function OrganizationSignupForm() {
     };
 
     const handleSendOtp = async () => {
+        if (sendingMail) return;
         try {
             setSendingMail(true);
             const response = await axiosInstance.post('/mail/send-otp', {
@@ -201,7 +202,8 @@ export default function OrganizationSignupForm() {
                 disabled={
                     companyFormData.companyEmail === '' ||
                     companyFormData.companyName === '' ||
-                    !companyFormData.termsAndConditionsAccepted
+                    !companyFormData.termsAndConditionsAccepted ||
+                    sendingMail
                         ? true
                         : false
                 }
