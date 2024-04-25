@@ -1,8 +1,8 @@
-export type InputProps = {
+export type TextareaProps = {
     label?: string;
     placeholder?: string;
     className?: string;
     value?: string;
     name?: string;
-    onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
+    onChange?: React.ChangeEventHandler<HTMLTextAreaElement> | undefined;
 };

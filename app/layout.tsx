@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
     return (
         <html lang='en'>
-            <body className={cn(poppins.className, 'overflow-x-hidden')}>
+            <body className={cn(poppins.className, 'w-screen overflow-x-hidden')}>
                 <UserProvider>{children}</UserProvider>
                 <Toaster />
             </body>
