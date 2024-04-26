@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-        user: process.env.NEXT_PUBLIC_HOST_EMAIL,
-        pass: process.env.NEXT_PUBLIC_HOST_EMAIL_PASSWORD,
+        user: process.env.HOST_EMAIL,
+        pass: process.env.HOST_EMAIL_PASSWORD,
     },
 });
 
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
         const OTP = generateOTP();
 
         await transporter.sendMail({
-            from: process.env.NEXT_PUBLIC_HOST_EMAIL,
+            from: process.env.HOST_EMAIL,
             to,
             subject: 'Your One-Time Password (OTP)',
             text: `You are receiving this email because you requested a one-time password (OTP) for accessing sway. Your OTP is: ${OTP}`,
