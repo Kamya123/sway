@@ -2,7 +2,6 @@ export type CompanyFormDataType = {
     companyName: string;
     location: string;
     companyEmail: string;
-    termsAndConditionsAccepted: boolean;
     companySize: companySize;
     companyDescription: string;
 };

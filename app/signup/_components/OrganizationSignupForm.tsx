@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import Textarea from '@/components/Textarea';
 import axiosInstance from '@/configs/axios.config';
-import indianStates from '@/app/store/indianStates';
+import { indianStates } from '@/lib/indianstates';
 
 const gochiHand = Gochi_Hand({ weight: '400', subsets: ['latin'] });
 
@@ -24,12 +24,12 @@ export default function OrganizationSignupForm() {
         companyName: '',
         companyEmail: '',
         location: '',
-        termsAndConditionsAccepted: false,
         companySize: '2 - 10',
         companyDescription: '',
     });
     const [otpSent, setOtpSent] = useState<string | undefined>(undefined);
     const [sendingMail, setSendingMail] = useState<boolean>(false);
+    // const [isTermsAndConditionsAccepted, setIsTermsAndConditionsAccepted] = useState<boolean>(true);
 
     const companySizeList: companySize[] = [
         '2 - 10',
@@ -153,7 +153,9 @@ export default function OrganizationSignupForm() {
                                     role='combobox'
                                     className='w-full justify-between bg-transparent hover:bg-transparent hover:text-purple-500 rounded-none border-2 border-purple-500 text-gray-500'
                                 >
-                                    {companyFormData.location ? companyFormData.location : 'Select Location...'}
+                                    {companyFormData.location
+                                        ? companyFormData.location
+                                        : 'Select Location...'}
                                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                                 </Button>
                             </PopoverTrigger>
@@ -164,7 +166,9 @@ export default function OrganizationSignupForm() {
                                             key={index}
                                             className={cn(
                                                 'text-sm p-2 cursor-pointer hover:bg-purple-100 flex item-center justify-between',
-                                                companyFormData.location === state.name ? 'text-purple-500' : 'text-gray-500',
+                                                companyFormData.location === state.name
+                                                    ? 'text-purple-500'
+                                                    : 'text-gray-500',
                                             )}
                                             onClick={() => {
                                                 setCompanyFormData((prev) => ({
@@ -177,7 +181,9 @@ export default function OrganizationSignupForm() {
                                             <CheckIcon
                                                 className={cn(
                                                     'h-4 w-4',
-                                                    companyFormData.location === state.name ? 'opacity-100' : 'opacity-0',
+                                                    companyFormData.location === state.name
+                                                        ? 'opacity-100'
+                                                        : 'opacity-0',
                                                 )}
                                             />
                                         </div>
@@ -203,15 +209,10 @@ export default function OrganizationSignupForm() {
                     value={companyFormData.companyDescription}
                 />
 
-                <div
+                {/* <div
                     className='flex items-center space-x-2'
                     onClick={() => {
-                        setCompanyFormData((prev) => {
-                            return {
-                                ...prev,
-                                termsAndConditionsAccepted: !prev.termsAndConditionsAccepted,
-                            };
-                        });
+                        setIsTermsAndConditionsAccepted((prev) => !prev);
                     }}
                 >
                     <Checkbox id='terms' />
@@ -221,7 +222,7 @@ export default function OrganizationSignupForm() {
                     >
                         Accept terms and conditions
                     </label>
-                </div>
+                </div> */}
             </div>
 
             <p className={cn(gochiHand.className, 'text-gray-500 text-xl text-center mt-10')}>
@@ -237,11 +238,8 @@ export default function OrganizationSignupForm() {
                 className={cn(gochiHand.className, 'text-xl px-10 py-2')}
                 disabled={
                     companyFormData.companyEmail === '' ||
-                        companyFormData.companyName === '' ||
-                        !companyFormData.termsAndConditionsAccepted ||
-                        sendingMail
-                        ? true
-                        : false
+                    companyFormData.companyName === '' ||
+                    sendingMail
                 }
             />
         </div>

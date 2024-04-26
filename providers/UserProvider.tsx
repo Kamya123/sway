@@ -2,11 +2,13 @@
 import { createContext, useState, useEffect } from 'react';
 import { UserProps } from '@/types/userprops.type';
 import { toast } from 'sonner';
+import { ConnectWalletStatusType } from '@/types/connectwalletstatus.type';
 
 interface UserContextProps {
     user: UserProps | undefined;
     ifMetamaskIsInstalled: () => Promise<boolean>;
     connectToMetaMaskAccount: () => void;
+    connectWalletStatus: ConnectWalletStatusType;
 }
 
 export const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -17,6 +19,7 @@ interface UserProviderProps {
 
 export default function UserProvider({ children }: UserProviderProps) {
     const [user, setUser] = useState<UserProps | undefined>(undefined);
+    const [connectWalletStatus, setConnectWalletStatus] = useState<ConnectWalletStatusType>('INIT');
 
     const ifMetamaskIsInstalled = async (): Promise<boolean> => {
         try {
@@ -36,6 +39,7 @@ export default function UserProvider({ children }: UserProviderProps) {
     };
 
     const connectToMetaMaskAccount = async () => {
+        setConnectWalletStatus('PENDING');
         try {
             const isMetamaskInstalled = await ifMetamaskIsInstalled();
             if (isMetamaskInstalled) {
@@ -49,18 +53,22 @@ export default function UserProvider({ children }: UserProviderProps) {
                     setUser((prev) => {
                         return { ...prev, address: firstAddress };
                     });
+                    setConnectWalletStatus('SUCCESS');
 
                     return true;
                 } else {
                     toast('User has declined the connection request.');
+                    setConnectWalletStatus('FAILED');
                     return false;
                 }
             } else {
+                setConnectWalletStatus('FAILED');
                 return false;
             }
         } catch (error) {
             console.log(error);
             toast('Error while connecting to your Metamask.');
+            setConnectWalletStatus('FAILED');
             return false;
         }
     };
@@ -71,6 +79,7 @@ export default function UserProvider({ children }: UserProviderProps) {
         user,
         ifMetamaskIsInstalled,
         connectToMetaMaskAccount,
+        connectWalletStatus,
     };
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,5 +1,4 @@
-
-const indianStates = [
+export const indianStates = [
     { name: 'Andaman and Nicobar Islands' },
     { name: 'Andhra Pradesh' },
     { name: 'Arunachal Pradesh' },
@@ -36,8 +35,6 @@ const indianStates = [
     { name: 'Uttar Pradesh' },
     { name: 'Uttarakhand' },
     { name: 'West Bengal' },
-]
-  
-  
+];
+
 export default indianStates;
-  
