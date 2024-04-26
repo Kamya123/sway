@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { CheckIcon, ChevronsUpDown } from 'lucide-react';
 import Textarea from '@/components/Textarea';
 import axiosInstance from '@/configs/axios.config';
+import indianStates from '@/app/store/indianStates';
 
 const gochiHand = Gochi_Hand({ weight: '400', subsets: ['latin'] });
 
@@ -143,13 +144,48 @@ export default function OrganizationSignupForm() {
                         </Popover>
                     </div>
 
-                    <Input
-                        label='Location ( optional )'
-                        placeholder='Kolkata, West Bengal, IN'
-                        name='location'
-                        onChange={handleFormDataChange}
-                        value={companyFormData.location}
-                    />
+                    <div className='flex flex-col gap-1 w-full'>
+                        <p className='text-sm text-gray-500'>Location</p>
+                        <Popover>
+                            <PopoverTrigger asChild>
+                                <Button
+                                    variant='outline'
+                                    role='combobox'
+                                    className='w-full justify-between bg-transparent hover:bg-transparent hover:text-purple-500 rounded-none border-2 border-purple-500 text-gray-500'
+                                >
+                                    {companyFormData.location ? companyFormData.location : 'Select Location...'}
+                                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className='w-full p-0 rounded-none max-h-56 overflow-y-auto'>
+                                <div className='w-full md:w-[300px] flex flex-col gap-3 p-1'>
+                                    {indianStates.map((state, index) => (
+                                        <div
+                                            key={index}
+                                            className={cn(
+                                                'text-sm p-2 cursor-pointer hover:bg-purple-100 flex item-center justify-between',
+                                                companyFormData.location === state.name ? 'text-purple-500' : 'text-gray-500',
+                                            )}
+                                            onClick={() => {
+                                                setCompanyFormData((prev) => ({
+                                                    ...prev,
+                                                    location: state.name,
+                                                }));
+                                            }}
+                                        >
+                                            <p>{state.name}</p>
+                                            <CheckIcon
+                                                className={cn(
+                                                    'h-4 w-4',
+                                                    companyFormData.location === state.name ? 'opacity-100' : 'opacity-0',
+                                                )}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            </PopoverContent>
+                        </Popover>
+                    </div>
                 </div>
                 <Input
                     label='Company Email'
@@ -201,9 +237,9 @@ export default function OrganizationSignupForm() {
                 className={cn(gochiHand.className, 'text-xl px-10 py-2')}
                 disabled={
                     companyFormData.companyEmail === '' ||
-                    companyFormData.companyName === '' ||
-                    !companyFormData.termsAndConditionsAccepted ||
-                    sendingMail
+                        companyFormData.companyName === '' ||
+                        !companyFormData.termsAndConditionsAccepted ||
+                        sendingMail
                         ? true
                         : false
                 }
