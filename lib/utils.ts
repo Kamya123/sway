@@ -16,3 +16,9 @@ export function generateOTP(length: number = 6): string {
 
     return OTP;
 }
+
+export function convertUTCTimestampToDateString(timestamp: string): string {
+    const date = new Date(timestamp);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}

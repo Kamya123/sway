@@ -1,4 +1,5 @@
-import { CircleArrowOutUpRight, ExternalLink } from 'lucide-react';
+import useUser from '@/hooks/useUser';
+import { CircleArrowOutUpRight } from 'lucide-react';
 import { Gochi_Hand } from 'next/font/google';
 import Link from 'next/link';
 
@@ -13,6 +14,22 @@ export default function SettingsTab() {
 }
 
 function UpgradeToProPlan() {
+    const { user } = useUser();
+
+    const isSubscribed = user?.data?.isSubscribed;
+    if (isSubscribed) {
+        return (
+            <div className='bg-white border shadow-md px-6 py-6 flex flex-col gap-6'>
+                <h1 className='text-3xl font-bold text-purple-500'>
+                    Your Pro Plan has been activated ✨
+                </h1>
+                <p className='text-sm flex flex-col gap-1'>
+                    Your Pro Plan is now activated, unlocking a world of premium features and
+                    exclusive benefits designed to supercharge your experience! 🚀
+                </p>
+            </div>
+        );
+    }
     return (
         <div className='bg-white border shadow-md px-6 py-6 flex flex-col gap-6'>
             <h1 className='text-3xl font-bold text-purple-500'>Upgrade to Sway Pro ✨</h1>

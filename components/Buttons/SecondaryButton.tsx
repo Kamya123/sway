@@ -12,10 +12,13 @@ export default function SecondaryButton({
         <button
             onClick={disabled ? () => {} : onClick}
             className={cn(
-                'text-sm text-purple-500 py-2 px-4 bg-transparent border-2 border-purple-500',
+                'text-sm text-black py-2 px-4 bg-transparent border-2 border-black mb-1',
                 className,
                 disabled && 'cursor-not-allowed border-gray-500 text-gray-500',
             )}
+            style={{
+                boxShadow: '5px 5px',
+            }}
         >
             {label}
         </button>

@@ -19,12 +19,12 @@ export default function Hero() {
                     ensuring the privacy and integrity of the voting process.
                 </p>
             </div>
-            <div className='flex items-center gap-2'>
+            <div className='flex flex-col md:flex-row items-center gap-3 md:gap-4'>
                 <Link href={'/signup'}>
-                    <PrimaryButton label='Get Started' />
+                    <PrimaryButton label='Get Started' className='w-[300px] md:w-[180px]' />
                 </Link>
                 <Link href={'#about'}>
-                    <SecondaryButton label='Read More' />
+                    <SecondaryButton label='Read More' className='w-[300px] md:w-[180px]' />
                 </Link>
             </div>
         </section>

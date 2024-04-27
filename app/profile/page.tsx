@@ -1,15 +1,27 @@
 'use client';
-import { cn } from '@/lib/utils';
+import { cn, convertUTCTimestampToDateString } from '@/lib/utils';
 import { Calendar, Cuboid, MapPin } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SettingsTab from './_components/SettingsTab';
+import useUser from '@/hooks/useUser';
 
 export default function Profile() {
     const tabs = ['Surveys', 'Engagement', 'Analytics', 'Settings'];
-
     const [activeTab, setActiveTab] = useState<string>(tabs[0]);
 
+    const { user, fetchUserDetails } = useUser();
+
+    useEffect(() => {
+        fetchUserDetails();
+    }, [fetchUserDetails]);
+
+    if (!user?.address)
+        return (
+            <div className='h-screen w-screen grid place-content-center'>
+                <p>Loading ...</p>
+            </div>
+        );
     return (
         <div className='relative min-h-screen'>
             <div className='h-[150px] relative'>
@@ -26,8 +38,9 @@ export default function Profile() {
                 </div>
                 <div className='absolute top-full left-[10%] h-[120px] w-[120px] rounded-full overflow-hidden -translate-x-1/2 -translate-y-1/2 border-white z-10 border-2 bg-white shadow'>
                     <Image
+                        priority={true}
                         src={
-                            'https://images.unsplash.com/photo-1553835973-dec43bfddbeb?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                            'https://cloudfront-us-east-2.images.arcpublishing.com/reuters/43YAWLITTZJLZIQTCP2JSS4KSM.jpg'
                         }
                         alt='org-logo'
                         className='h-full w-full object-cover'
@@ -39,19 +52,26 @@ export default function Profile() {
             <div className='gap-8 flex min-h-[50vh]'>
                 <div className='w-1/4 h-full py-[80px] ps-[5%] flex flex-col'>
                     <div>
-                        <p className='text-purple-900 font-medium text-lg'>Mc Dowalds & Co.</p>
+                        <p className='text-purple-900 font-medium text-lg'>
+                            {user?.data?.username}
+                        </p>
                         <p className='text-sm text-gray-500 mt-2'>
-                            McDowalds & Co. is a bustling family-owned restaurant that has been
-                            serving up delicious meals and warm hospitality for over two decades.
+                            {user?.data?.aboutMe
+                                ? user?.data?.aboutMe
+                                : `🌟 Hey! there, I am  ${user.data.username}. I have joined sway, try following me, I post good stuff.`}
                         </p>
 
                         <div className='mt-8 flex gap-8'>
                             <div className='flex flex-col'>
-                                <h3 className='text-4xl font-bold text-purple-500'>5326</h3>
+                                <h3 className='text-4xl font-bold text-purple-500'>
+                                    {user?.data?.followers?.length || 0}
+                                </h3>
                                 <p className='text-sm text-gray-500'>Followers</p>
                             </div>
                             <div className='flex flex-col'>
-                                <h3 className='text-4xl font-bold text-purple-500'>255</h3>
+                                <h3 className='text-4xl font-bold text-purple-500'>
+                                    {user?.data?.following?.length || 0}
+                                </h3>
                                 <p className='text-sm text-gray-500'>Followings</p>
                             </div>
                         </div>
@@ -60,17 +80,15 @@ export default function Profile() {
                     <div className='mt-10 text-sm text-gray-500 flex flex-col gap-2'>
                         <div className='flex items-center gap-1'>
                             <Calendar className='h-4 w-4' />
-                            <p>Joined on 25th April, 2024</p>
+                            <p>Joined on {convertUTCTimestampToDateString(user?.data?.joinedAt)}</p>
                         </div>
-                        <div className='flex items-center gap-1'>
+                        {/* <div className='flex items-center gap-1'>
                             <MapPin className='h-4 w-4' />
                             <p>Kolkata, West Bengal, India</p>
-                        </div>
+                        </div> */}
                         <div className='flex items-center gap-1'>
                             <Cuboid className='h-5 w-5' />
-                            <p className='line-clamp-1'>
-                                0xBd0Dbd3A162beC1374Bf0D4B384875c350275Abe
-                            </p>
+                            <p className='line-clamp-1'>{user?.address}</p>
                         </div>
                     </div>
                 </div>

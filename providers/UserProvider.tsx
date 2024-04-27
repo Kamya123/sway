@@ -1,14 +1,16 @@
 'use client';
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useCallback } from 'react';
 import { UserProps } from '@/types/userprops.type';
 import { toast } from 'sonner';
 import { ConnectWalletStatusType } from '@/types/connectwalletstatus.type';
+import axiosInstance from '@/configs/node-service.config';
 
 interface UserContextProps {
     user: UserProps | undefined;
     ifMetamaskIsInstalled: () => Promise<boolean>;
     connectToMetaMaskAccount: () => void;
     connectWalletStatus: ConnectWalletStatusType;
+    fetchUserDetails: () => void;
 }
 
 export const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -38,7 +40,44 @@ export default function UserProvider({ children }: UserProviderProps) {
         }
     };
 
-    const connectToMetaMaskAccount = async () => {
+    const fetchUserDetails = async () => {
+        const _userAddress = window.localStorage.getItem('address');
+        if (!_userAddress) return null;
+
+        try {
+            const response = await axiosInstance.post('/user/load-profile', {
+                userId: _userAddress,
+            });
+
+            if (response.status === 200) {
+                setUser(() => {
+                    return {
+                        address: _userAddress,
+                        data: response.data?.data,
+                    };
+                });
+            }
+        } catch (error) {
+            console.log('User not found, creating a fresh individual account ...');
+
+            const signupResponse = await axiosInstance.post('/auth/signup', {
+                userId: _userAddress,
+            });
+
+            if (signupResponse.status === 200) {
+                console.log('Individual account has been created');
+
+                setUser(() => {
+                    return {
+                        address: _userAddress,
+                        data: signupResponse.data?.data,
+                    };
+                });
+            }
+        }
+    };
+
+    const connectToMetaMaskAccount = useCallback(async () => {
         setConnectWalletStatus('PENDING');
         try {
             const isMetamaskInstalled = await ifMetamaskIsInstalled();
@@ -50,9 +89,10 @@ export default function UserProvider({ children }: UserProviderProps) {
 
                 if (response.length) {
                     const firstAddress = response[0];
-                    setUser((prev) => {
-                        return { ...prev, address: firstAddress };
+                    setUser(() => {
+                        return { address: firstAddress, data: {} };
                     });
+                    window.localStorage.setItem('address', firstAddress);
                     setConnectWalletStatus('SUCCESS');
 
                     return true;
@@ -71,15 +111,14 @@ export default function UserProvider({ children }: UserProviderProps) {
             setConnectWalletStatus('FAILED');
             return false;
         }
-    };
-
-    const detectMetamaskAccount = async () => {};
+    }, []);
 
     const value: UserContextProps = {
         user,
         ifMetamaskIsInstalled,
         connectToMetaMaskAccount,
         connectWalletStatus,
+        fetchUserDetails,
     };
 
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -51,7 +51,7 @@ export default function Navbar() {
             </div>
             <div>
                 <Link href='/signup'>
-                    <PrimaryButton label='Get Started' className='hidden md:block' />
+                    <PrimaryButton label='Get Started' className='hidden md:block px-6' />
                 </Link>
                 <Drawer>
                     <DrawerTrigger className='md:hidden'>
